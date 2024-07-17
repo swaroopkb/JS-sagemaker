@@ -69,7 +69,7 @@ searchButton.addEventListener('click', () => {
     resultsContainer.innerHTML = '';
     previewimage.style.opacity = 1; 
     labeltiles.style.opacity =1;
-    labeltilesresult.opacity = 1;
+    labeltilesresult.style.opacity = 1;
     // Create image elements and append to results container
     imageUrls.forEach(imageUrl => {
       const img = document.createElement('img');
