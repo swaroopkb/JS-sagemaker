@@ -1,0 +1,174 @@
+body {
+    font-family: sans-serif;  /* Set a nice font */
+    margin: 2rem;  /* Add some margin for spacing */
+    background-color: #FFFFFF; /* Light background color */
+  }
+  
+  h1 {
+    text-align: center;  /* Center the heading */
+    margin-top: 5rem;  /* Add margin from the top */
+  }
+  
+  #upload-section {
+    display: flex;  /* Enable flexbox layout */
+    justify-content: center;  /* Center elements horizontally */
+    align-items: center;  /* Center elements vertically */
+    gap: 1rem;  /* Add some space between elements (optional) */
+    margin-left: .5rem; 
+  }
+
+  #search-section {
+    display: flex;  /* Enable flexbox layout */
+    justify-content: center;  /* Center elements horizontally */
+    align-items: center;  /* Center elements vertically */
+    gap: 1rem;  /* Add some space between elements (optional) */
+    margin-top: 1rem; 
+  }
+  
+  #image-upload {
+    padding: 0.5rem;  /* Add padding to the file input */
+    border: 1px solid #ccc;  /* Add a border */
+    border-radius: 5px;  /* Rounded corners */
+  }
+  
+  #search-button {
+    padding: 0.5rem 1rem;  /* Add padding to the button */
+    background-color: #333;  /* Darker background for contrast */
+    color: white;  /* White text */
+    border: none;  /* Remove button border */
+    border-radius: 5px;  /* Rounded corners */
+    cursor: pointer;  /* Change cursor to indicate clickability */
+  }
+
+  #label-tiles {
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;  /* Add padding to the button */
+    background-color: #FFFFFF;  /* Darker background for contrast */
+    color: rgb(6, 6, 6);  /* White text */
+    border: none;  /* Remove button border */
+    border-radius: 5px;  /* Rounded corners */
+    cursor: pointer;  /* Change cursor to indicate clickability */
+  }
+  
+  #label-tiles-result {
+    text-align: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;  /* Add padding to the button */
+    background-color: #FFFFFF;  /* Darker background for contrast */
+    color: rgb(6, 6, 6);  /* White text */
+    border: none;  /* Remove button border */
+    border-radius: 5px;  /* Rounded corners */
+    cursor: pointer;  /* Change cursor to indicate clickability */
+  }
+  
+  #search-button:hover {  /* Style on button hover */
+    background-color: #444;  /* Slightly darker on hover */
+  }
+  
+  #results-container {
+    padding: 1rem 1rem; 
+    display: grid;  /* Display results as a grid */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));  /* Responsive grid columns */
+    gap: 1rem;  /* Space between grid items */
+  }
+  
+  #results-container img {
+    width: 100%;  /* Images fill the grid cell width */
+    height: auto;  /* Maintain aspect ratio */
+    object-fit: cover;  /* Crop images to fit without distortion */
+    
+  }
+
+  #logo-container {
+    position: absolute;  /* Take logo out of normal flow */
+    top: 0;  /* Position at top */
+    left: 0;  /* Position at left */
+    padding: 1rem;  /* Add some padding around the logo */
+    background-image: url('download.png'); 
+    background-size: auto 100px;
+    max-width: 200px;  /* Set maximum width */
+    max-height: 50px;  /* Set maximum height */
+    background-repeat: no-repeat;  /* Prevent image tiling */
+    width: 150px;
+    height: 50px;
+  }
+
+  #file-name-textbox {
+    /* ... existing styles */
+    visibility: hidden;
+  }
+
+  #file-name-label {
+    padding: 0.5rem 1rem;
+    background-color: #ddd;
+    cursor: pointer;
+    width: 300px;
+    height: 19px;
+    border-radius: 5px;
+  }
+
+
+  #preview-section{
+    /* position: absolute;
+    top: -9999px;
+    left: -9999px; */
+    /* background-color: #c9c9c9; */
+    justify-content: center;
+    margin-top: 1rem; 
+    text-align: center;
+    display: flex;
+  }
+
+ #image-preview {
+    justify-content: center;
+    margin-bottom: 1rem;
+    background-color: rgb(64, 64, 64);
+    width: 120px;
+    height: 120px;
+    border-radius: 5px;
+    padding: 0.5rem;
+  } 
+/*    
+  #image-preview {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+    z-index: 9999;
+  }
+
+  #file-name-label:hover ~ #preview-section {
+   
+    display: flex;
+  } */
+  
+
+  /* #image-preview-trigger:hover + #image-preview {
+    display: flex;
+  } */
+  
+  #preview-image {
+    flex-shrink: 0;
+    margin: .6rem;
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Ensure image fills the container */
+  }
+
+  #close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
