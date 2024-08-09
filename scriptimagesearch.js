@@ -37,6 +37,23 @@ uploadInput.addEventListener('change', (event) => {
           imagePreview.src = canvas.toDataURL('image/jpeg');  // Or 'image/png'
         };
         img.src = e.target.result;
+       const base64Data = e.target.result;
+       // Replace with your API endpoint and other necessary logic
+        const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/default/sgVisualSearchDemo';
+
+      fetch(apiEndpoint, {
+         method: 'POST',
+         headers: {
+          'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({ imageData: base64Data })
+       })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
       };
       reader.readAsDataURL(selectedFile);
       imagePreview.style.opacity = 1;
