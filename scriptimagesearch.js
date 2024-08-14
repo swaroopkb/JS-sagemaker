@@ -39,7 +39,7 @@ uploadInput.addEventListener('change', (event) => {
         img.src = e.target.result;
        const base64Data = e.target.result;
        // Replace with your API endpoint and other necessary logic
-        const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/default/sgVisualSearchDemo';
+        const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
 
       fetch(apiEndpoint, {
          method: 'POST',
