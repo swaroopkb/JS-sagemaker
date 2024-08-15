@@ -55,11 +55,12 @@ uploadInput.addEventListener('change', async (event) => {
     // Send the image data to the API (async/await)
     const [base64Data, thumbnailData] = await Promise.all([imageDataPromise, thumbnailPromise]);
     const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
-
+    const apiKey = '2p8pge5K3S4pBo5uSCKCNaeUrDUfzI8x2wWpkaND'
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${apiKey}'
       },
       // mode: 'no-cors', // Consider using CORS if applicable
       body: JSON.stringify({ imageData: base64Data, thumbnail: thumbnailData || null }) // Include thumbnail if available
