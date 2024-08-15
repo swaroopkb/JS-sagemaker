@@ -61,7 +61,7 @@ uploadInput.addEventListener('change', async (event) => {
       headers: {
         'Content-Type': 'application/json'
       },
-      mode: 'no-cors', // Consider using CORS if applicable
+      mode: 'cors', // Consider using CORS if applicable
       body: JSON.stringify({ imageData: base64Data, thumbnail: thumbnailData || null }) // Include thumbnail if available
     });
 
