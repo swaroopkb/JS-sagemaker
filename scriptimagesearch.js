@@ -10,70 +10,74 @@ const labeltilesresult = document.getElementById('label-tiles-result');
 
 // imagePreview.style.opacity = 0; 
 // previewsection.style.opacity = 0; 
-uploadInput.addEventListener('change', (event) => {
+uploadInput.addEventListener('change', async (event) => {
   const selectedFile = event.target.files[0];
-  const fileName = selectedFile.name;
-  
-  if (selectedFile) {
-    const reader = new FileReader();
-    //  imagePreview.src = '';
-    fileNameLabel.textContent = fileName; 
-    imagePreview.style.opacity = 1;
-    previewsection.style.opacity = 1; 
-    reader.onload = (e) => {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          // Desired thumbnail dimensions
-          const thumbnailWidth = 100;  // Adjust as needed
-          const thumbnailHeight = 100; // Adjust as needed
-  
-          canvas.width = thumbnailWidth;
-          canvas.height = thumbnailHeight;
-          ctx.drawImage(img, 0, 0, thumbnailWidth, thumbnailHeight);
-  
-          imagePreview.src = canvas.toDataURL('image/jpeg');  // Or 'image/png'
-        };
-        img.src = e.target.result;
-       const base64Data = e.target.result;
-       // Replace with your API endpoint and other necessary logic
-        const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
 
-      fetch(apiEndpoint, {
-         method: 'POST',
-         headers: {
-          'Content-Type': 'application/json'
-         },
-         mode: 'no-cors',
-         body: JSON.stringify({ imageData: base64Data })
-       })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      };
-      reader.readAsDataURL(selectedFile);
-      imagePreview.style.opacity = 1;
-      previewsection.style.opacity = 1; 
-    } else {
-        fileNameLabel.textContent = ''; 
-        imagePreview.src = '';
-        imagePreview.style.opacity = 0;
-        previewsection.style.opacity = 0;
+  if (!selectedFile) {
+    console.error('No file selected');   
 
-        
-        // imagePreview.style.display = 'none'; // Hide the image preview
+    return;
   }
 
-  // Update the label or textbox with the filename
-  // For label
-  // fileNameLabel.value = fileName;       // For textbox (if using one)
-});
+  const fileName = selectedFile.name;
+  fileNameLabel.textContent = fileName;
+  imagePreview.style.opacity = 1;
+  previewsection.style.opacity = 1;
 
+  try {
+    // Read the image file as data URL
+    const reader = new FileReader();
+    const imageDataPromise = new Promise((resolve, reject) => {
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(selectedFile);
+    });
+
+    // Create thumbnail image (optional)
+    const thumbnailPromise = imageDataPromise.then(async (dataUrl) => {
+      const img = new Image();
+      img.src = dataUrl;
+      await img.decode(); // Ensure image is loaded before processing
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const thumbnailWidth = 100; // Adjust as needed
+      const thumbnailHeight = 100; // Adjust as needed
+
+      canvas.width = thumbnailWidth;
+      canvas.height = thumbnailHeight;
+      ctx.drawImage(img, 0, 0, thumbnailWidth, thumbnailHeight);
+
+      return canvas.toDataURL('image/jpeg'); // Or 'image/png'
+    });
+
+    // Send the image data to the API (async/await)
+    const [base64Data, thumbnailData] = await Promise.all([imageDataPromise, thumbnailPromise]);
+    const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      mode: 'no-cors', // Consider using CORS if applicable
+      body: JSON.stringify({ imageData: base64Data, thumbnail: thumbnailData || null }) // Include thumbnail if available
+    });
+
+    console.log(response);
+    const data = await response.json(); // Parse the response data
+    // Handle the API response (display results, etc.)
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle errors (display error message, etc.)
+  } finally {
+    // Optional: Reset UI elements after processing
+    imagePreview.src = '';
+    imagePreview.style.opacity = 0;
+    previewsection.style.opacity = 0;
+  }
+});
 // previewButton.addEventListener('click', () => {
 //     imagePreview.style.display = 'flex';
 //   });
