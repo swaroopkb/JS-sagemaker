@@ -65,7 +65,7 @@ uploadInput.addEventListener('change', async (event) => {
       body: JSON.stringify({ imageData: base64Data, thumbnail: thumbnailData || null }) // Include thumbnail if available
     });
 
-    //console.log(response);
+    console.log(response);
     // if (response.ok) {
       const data = await response.json();
       console.log(data);
