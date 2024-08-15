@@ -66,8 +66,15 @@ uploadInput.addEventListener('change', async (event) => {
     });
 
     console.log(response);
-    const data = await response.json(); // Parse the response data
-    // Handle the API response (display results, etc.)
+    if (response.ok) {
+      const data = await response.json();
+      const imageUrls = data.body; // Access the image URLs from the response
+
+      // Do something with the image URLs (e.g., display them)
+      console.log(imageUrls);
+    } else {
+      console.error('Error fetching image URLs:', response.statusText);
+    }
   } catch (error) {
     console.error('Error:', error);
     // Handle errors (display error message, etc.)
