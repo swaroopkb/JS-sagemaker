@@ -7,111 +7,141 @@ const searchButton = document.getElementById('search-button');
 const resultsContainer = document.getElementById('results-container');
 const labeltiles = document.getElementById('label-tiles');
 const labeltilesresult = document.getElementById('label-tiles-result');
+const loadingSpinner = document.getElementById('loading-spinner');
+var imageUrls = '';
 
-// imagePreview.style.opacity = 0; 
+function startAnimation() {
+  loadingSpinner.style.display = 'block';
+}
+
+function stopAnimation() {
+  loadingSpinner.style.display = 'none';
+}
+// imagePreview.style.opacity = 0;
 // previewsection.style.opacity = 0; 
-uploadInput.addEventListener('change', (event) => {
+stopAnimation();
+uploadInput.addEventListener('change', async (event) => {
   const selectedFile = event.target.files[0];
-  const fileName = selectedFile.name;
 
-  if (selectedFile) {
-    const reader = new FileReader();
-    //  imagePreview.src = '';
-    fileNameLabel.textContent = fileName;
-    imagePreview.style.opacity = 1;
-    previewsection.style.opacity = 1;
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = function () {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+  if (!selectedFile) {
+    console.error('No file selected');
 
-        // Desired thumbnail dimensions
-        const thumbnailWidth = 100;  // Adjust as needed
-        const thumbnailHeight = 100; // Adjust as needed
-
-        canvas.width = thumbnailWidth;
-        canvas.height = thumbnailHeight;
-        ctx.drawImage(img, 0, 0, thumbnailWidth, thumbnailHeight);
-
-        imagePreview.src = canvas.toDataURL('image/jpeg');  // Or 'image/png'
-      };
-      img.src = e.target.result;
-      const base64Data = e.target.result;
-      // Replace with your API endpoint and other necessary logic
-      const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/default/sgVisualSearchDemo';
-
-      fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ imageData: base64Data })
-      })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    };
-    reader.readAsDataURL(selectedFile);
-    imagePreview.style.opacity = 1;
-    previewsection.style.opacity = 1;
-  } else {
-    fileNameLabel.textContent = '';
-    imagePreview.src = '';
-    imagePreview.style.opacity = 0;
-    previewsection.style.opacity = 0;
-
-
-    // imagePreview.style.display = 'none'; // Hide the image preview
+    return;
   }
 
-  // Update the label or textbox with the filename
-  // For label
-  // fileNameLabel.value = fileName;       // For textbox (if using one)
-});
+  const fileName = selectedFile.name;
+  fileNameLabel.textContent = fileName;
+  imagePreview.style.opacity = 1;
+  previewsection.style.opacity = 1;
+  startAnimation();
+  try {
+    // Read the image file as data URL
+    const reader = new FileReader();
+    const imageDataPromise = new Promise((resolve, reject) => {
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(selectedFile);
+    });
 
+    // Create thumbnail image (optional)
+    const thumbnailPromise = imageDataPromise.then(async (dataUrl) => {
+      const img = new Image();
+      img.src = dataUrl;
+      await img.decode(); // Ensure image is loaded before processing
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const thumbnailWidth = 100; // Adjust as needed
+      const thumbnailHeight = 100; // Adjust as needed
+
+      canvas.width = thumbnailWidth;
+      canvas.height = thumbnailHeight;
+      ctx.drawImage(img, 0, 0, thumbnailWidth, thumbnailHeight);
+
+      return canvas.toDataURL('image/jpeg'); // Or 'image/png'
+    });
+
+    // Send the image data to the API (async/await)
+    const [base64Data] = await Promise.all([imageDataPromise]);
+    const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+    const apiKey = '2p8pge5K3S4pBo5uSCKCNaeUrDUfzI8x2wWpkaND'
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${apiKey}'
+      },
+      // mode: 'no-cors', // Consider using CORS if applicable
+      body: JSON.stringify({ imageData: base64Data }) // Include thumbnail if available
+    });
+
+    console.log(response);
+    // if (response.ok) {
+    const data = await response.json();
+    console.log(data);
+    imageUrls = data.body; // Access the image URLs from the response
+
+    // Do something with the image URLs (e.g., display them)
+    console.log(imageUrls);
+    const imageUrlsExtracted = JSON.parse(imageUrls);
+    // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
+    const [thumbnailData] = await Promise.all([thumbnailPromise]);
+    imagePreview.src = thumbnailData;
+    // Clear previous results
+    resultsContainer.innerHTML = '';
+    previewimage.style.opacity = 1;
+    labeltiles.style.opacity = 1;
+    labeltilesresult.style.opacity = 1;
+    resultsContainer.style.opacity = 1;
+    // Create image elements and append to results container
+    imageUrlsExtracted.forEach(imageUrl => {
+      // const img = document.createElement('img');
+      // img.src = imageUrl;
+      // resultsContainer.appendChild(img);
+      const col = document.createElement('div');
+      col.classList.add('col-md-4'); // Adjust column size as needed
+      const card = document.createElement('div');
+      card.classList.add('card');
+
+
+      const cardBody = document.createElement('div');
+      cardBody.classList.add('card-body',
+        'shadow', 'p-4');
+
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.classList.add('img-fluid', 'shadow',);
+      cardBody.appendChild(img);
+      card.appendChild(cardBody);
+
+      // card.appendChild(img);
+      col.appendChild(card);
+      resultsContainer.appendChild(col);
+    });
+    stopAnimation();
+    // } else {
+    //   console.error('Error fetching image URLs:', response.statusText);
+    // }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle errors (display error message, etc.)
+  } finally {
+    // Optional: Reset UI elements after processing
+    // imagePreview.src = '';
+    // imagePreview.style.opacity = 0;
+    // previewsection.style.opacity = 0;
+  }
+});
 // previewButton.addEventListener('click', () => {
 //     imagePreview.style.display = 'flex';
 //   });
-function uploadImage() {
-  const fileInput = document.getElementById('imageUpload');
 
-  const file = fileInput.files[0];
-
-  if (file) {
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-      const base64Data = e.target.result;
-
-      // Replace with your API endpoint and other necessary logic
-      const apiEndpoint = 'https://your-api-gateway-endpoint';
-
-      fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ imageData: base64Data })
-      })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    };
-
-    reader.readAsDataURL(file);
-  }
-}
 
 searchButton.addEventListener('click', () => {
   // Simulate search results (replace with your actual API call)
-  const imageUrls = ['santiago.jpg', 'rio_upano.jpg', 'Q4012_4_2.jpg'];
+  const imageUrlsExtracted = JSON.parse(imageUrls);
+  // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
 
   // Clear previous results
   resultsContainer.innerHTML = '';
@@ -119,26 +149,9 @@ searchButton.addEventListener('click', () => {
   labeltiles.style.opacity = 1;
   labeltilesresult.style.opacity = 1;
   // Create image elements and append to results container
-  imageUrls.forEach(imageUrl => {
-    // const img = document.createElement('img');
-    // img.src = imageUrl;
-    // resultsContainer.appendChild(img);
-    const col = document.createElement('div');
-    col.classList.add('col-md-4'); // Adjust column size as needed
-    const card = document.createElement('div');
-    card.classList.add('card');
-
-
-    const cardBody = document.createElement('div');
-    cardBody.classList.add('card-body',
-      'shadow', 'p-4');
-
+  imageUrlsExtracted.forEach(imageUrl => {
     const img = document.createElement('img');
     img.src = imageUrl;
-    img.classList.add('img-fluid', 'shadow',);
-    cardBody.appendChild(img);
-    card.appendChild(cardBody);
-    col.appendChild(img);
-    resultsContainer.appendChild(col);
+    resultsContainer.appendChild(img);
   });
 });
