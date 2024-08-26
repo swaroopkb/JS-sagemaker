@@ -120,8 +120,15 @@ h1 {
   /* Maintain aspect ratio */
   object-fit: cover;
   /* Crop images to fit without distortion */
-
+  border-radius: 5px;
 }
+
+#results-container img:hover {
+  transform: scale(1.01);
+  /* Zoom in slightly on hover */
+}
+
+
 
 #logo-container {
   position: absolute;
@@ -177,7 +184,7 @@ h1 {
   width: 120px;
   height: 120px;
   border-radius: 5px;
-  padding: 0.5rem;
+  padding: 0.3rem;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
