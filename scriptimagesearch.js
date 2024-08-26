@@ -3,10 +3,10 @@ const fileNameLabel = document.getElementById('file-name-label');  // Assuming y
 const imagePreview = document.getElementById('preview-image');
 const previewsection = document.getElementById('preview-section');
 const previewimage = document.getElementById('image-preview');
-const searchButton = document.getElementById('search-button');
+// const searchButton = document.getElementById('search-button');
 const resultsContainer = document.getElementById('results-container');
-const labeltiles = document.getElementById('label-tiles');
-const labeltilesresult = document.getElementById('label-tiles-result');
+const labeltiles = document.getElementById('tiles-search-section');
+const labeltilesresult = document.getElementById('matching-tiles-section');
 const loadingSpinner = document.getElementById('loading-spinner');
 var imageUrls = '';
 
@@ -136,20 +136,20 @@ uploadInput.addEventListener('change', async (event) => {
 //   });
 
 
-searchButton.addEventListener('click', () => {
-  // Simulate search results (replace with your actual API call)
-  const imageUrlsExtracted = JSON.parse(imageUrls);
-  // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
+// searchButton.addEventListener('click', () => {
+//   // Simulate search results (replace with your actual API call)
+//   const imageUrlsExtracted = JSON.parse(imageUrls);
+//   // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
 
-  // Clear previous results
-  resultsContainer.innerHTML = '';
-  previewimage.style.opacity = 1;
-  labeltiles.style.opacity = 1;
-  labeltilesresult.style.opacity = 1;
-  // Create image elements and append to results container
-  imageUrlsExtracted.forEach(imageUrl => {
-    const img = document.createElement('img');
-    img.src = imageUrl;
-    resultsContainer.appendChild(img);
-  });
-});
+//   // Clear previous results
+//   resultsContainer.innerHTML = '';
+//   previewimage.style.opacity = 1;
+//   labeltiles.style.opacity = 1;
+//   labeltilesresult.style.opacity = 1;
+//   // Create image elements and append to results container
+//   imageUrlsExtracted.forEach(imageUrl => {
+//     const img = document.createElement('img');
+//     img.src = imageUrl;
+//     resultsContainer.appendChild(img);
+//   });
+// });

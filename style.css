@@ -13,22 +13,24 @@ html {
 }
 
 h1 {
+  margin-bottom: 40px;
   text-align: center;
-  /* Center the heading */
-  margin-top: 5rem;
-  /* Add margin from the top */
+  width: 100%;
 }
 
 #upload-section {
   display: flex;
-  /* Enable flexbox layout */
   justify-content: center;
-  /* Center elements horizontally */
-  align-items: center;
-  /* Center elements vertically */
-  gap: 1rem;
-  /* Add some space between elements (optional) */
-  margin-left: .5rem;
+  margin-top: 20px;
+}
+
+#tiles-search-section {
+  margin-bottom: 50px;
+}
+
+#tiles-search-section h2,
+#matching-tiles-section h2 {
+  margin-bottom: 20px;
 }
 
 #search-section {
@@ -107,6 +109,14 @@ h1 {
   /* Slightly darker on hover */
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  /* Center align the content within the container */
+}
+
 #results-container {
   padding: 1rem 1rem;
   display: grid;
@@ -159,13 +169,22 @@ h1 {
   visibility: hidden;
 }
 
+.file-input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 25px;
+  padding: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 #file-name-label {
-  padding: 0.5rem 1rem;
-  background-color: #ddd;
-  cursor: pointer;
-  width: 300px;
-  height: 19px;
-  border-radius: 5px;
+  padding: 10px 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 250px;
+  color: #333;
 }
 
 #preview-section {
@@ -228,8 +247,8 @@ h1 {
   border: 16px solid #f3f3f3;
   border-top: 16px solid #3498db;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 50px;
+  height: 50px;
   animation: spin 2s linear infinite;
 }
 
@@ -250,4 +269,25 @@ h1 {
 
 .cards:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16), 0 4px 10px rgba(0, 0, 0, 0.23);
+}
+
+.photo-icon-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.photo-icon-label:hover {
+  background-color: #0056b3;
+}
+
+.photo-icon-label i {
+  font-size: 18px;
 }

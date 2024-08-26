@@ -6,42 +6,55 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Image Search</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
 </head>
 
 <body>
   <div id="loading-spinner">
     <div class="spinner"></div>
   </div>
-  <div>
+  <div class="container">
     <div id="logo-container">
     </div>
     <h1>Sagemaker AI Image Search Demo</h1>
     <div id="upload-section">
-      <label for="image-upload"
-        style="padding: 0.5rem 1rem; background-color: #ddd; cursor: pointer; border-radius: 5px;">Choose an
-        image</label>
+      <div class="file-input-container">
+        <label id="file-name-label">Choose an image</label>
+        <label for="image-upload" class="photo-icon-label">
+          <i class="fas fa-camera"></i>
+        </label>
+      </div>
       <input type="file" id="image-upload" accept="image/*" style="display: none;">
-      <label id="file-name-label"></label>
     </div>
 
-    <div id="search-section" style="opacity: 0;">
+    <!-- <div id="search-section" style="opacity: 0;">
       <button id="search-button">Search</button>
-    </div>
-    <div id="label-tiles" style="opacity: 0;">
-      <label id="Tiles-label">Tiles to search for:</label>
-    </div>
-    <div id="preview-section">
+    </div> -->
+    <div id="tiles-search-section" style="opacity: 0;">
+      <h2>Tiles to search for:</h2>
+      <!-- Your tiles to search for content -->
+      <div id="preview-section">
 
-      <div id="image-preview" style="opacity: 0;">
-        <img id="preview-image" src="" alt="Image Preview">
+        <div id="image-preview" style="opacity: 0;">
+          <img id="preview-image" src="" alt="Image Preview">
+        </div>
       </div>
     </div>
-
-    <div id="label-tiles-result" style="opacity: 0;">
+    <!-- <div id="label-tiles" style="opacity: 0;">
+      <label id="Tiles-label">Tiles to search for:</label>
+    </div>
+     -->
+    <div id="matching-tiles-section" style="opacity: 0;">
+      <h2>Matching tiles:</h2>
+      <!-- Your matching tiles content -->
+      <div id="results-container" style="opacity: 0;">
+      </div>
+    </div>
+    <!-- <div id="label-tiles-result" style="opacity: 0;">
       <label id="Tiles-label-result">Matching tiles:</label>
-    </div>
-    <div id="results-container" style="opacity: 0;">
-    </div>
+    </div> -->
+
   </div>
   <script src="scriptimagesearch.js"></script>
 </body>
