@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T384r9gHUAeg6cxog6AAuhHAp4896ttRKdGLRNen80aOgWGc98IA+IRg0hWxgA9Mh6+X" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <img id="logo-container" alt="Logo" class="img-fluid">
+            </div>
+            <div class="col-md-12">
+                <h1>Sagemaker AI Image Search Demo</h1>
+            </div>
+            <div class="col-md-12">
+                <div class="d-flex justify-content-center">
+                    <label for="image-upload" class="form-label">Choose an image</label>
+                    <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                    <label id="file-name-label" class="form-label"></label>
+                </div>
+            </div>
+            <div class="col-md-12 d-flex justify-content-center">
+                <button id="search-button" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C89scLLqNg519fKFByD54p0321qJwgNZ0W1v1hHVItQ5PDiE9Y0B45p6JXm" crossorigin="anonymous"></script>
+    <script src="scriptimagesearch.js"></script>
+</body>
+
+</html>

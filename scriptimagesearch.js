@@ -1,20 +1,30 @@
 const uploadInput = document.getElementById('image-upload');
 const fileNameLabel = document.getElementById('file-name-label');  // Assuming you have an element for the filename
 const imagePreview = document.getElementById('preview-image');
-const previewsection =  document.getElementById('preview-section');
+const previewsection = document.getElementById('preview-section');
 const previewimage = document.getElementById('image-preview');
 const searchButton = document.getElementById('search-button');
 const resultsContainer = document.getElementById('results-container');
 const labeltiles = document.getElementById('label-tiles');
 const labeltilesresult = document.getElementById('label-tiles-result');
+const loadingSpinner = document.getElementById('loading-spinner');
+var imageUrls = '';
 
-// imagePreview.style.opacity = 0; 
+function startAnimation() {
+  loadingSpinner.style.display = 'block';
+}
+
+function stopAnimation() {
+  loadingSpinner.style.display = 'none';
+}
+// imagePreview.style.opacity = 0;
 // previewsection.style.opacity = 0; 
+stopAnimation();
 uploadInput.addEventListener('change', async (event) => {
   const selectedFile = event.target.files[0];
 
   if (!selectedFile) {
-    console.error('No file selected');   
+    console.error('No file selected');
 
     return;
   }
@@ -23,7 +33,7 @@ uploadInput.addEventListener('change', async (event) => {
   fileNameLabel.textContent = fileName;
   imagePreview.style.opacity = 1;
   previewsection.style.opacity = 1;
-
+  startAnimation();
   try {
     // Read the image file as data URL
     const reader = new FileReader();
@@ -53,27 +63,61 @@ uploadInput.addEventListener('change', async (event) => {
     });
 
     // Send the image data to the API (async/await)
-    const [base64Data, thumbnailData] = await Promise.all([imageDataPromise, thumbnailPromise]);
+    const [base64Data] = await Promise.all([imageDataPromise]);
     const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
-    const apiKey = '2p8pge5K3S4pBo5uSCKCNaeUrDUfzI8x2wWpkaND'
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${apiKey}'
+        'Content-Type': 'application/json'
       },
       // mode: 'no-cors', // Consider using CORS if applicable
-      body: JSON.stringify({ imageData: base64Data, thumbnail: thumbnailData || null }) // Include thumbnail if available
+      body: JSON.stringify({ imageData: base64Data }) // Include thumbnail if available
     });
 
     console.log(response);
     // if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      const imageUrls = data.body; // Access the image URLs from the response
+    const data = await response.json();
+    console.log(data);
+    imageUrls = data.body; // Access the image URLs from the response
 
-      // Do something with the image URLs (e.g., display them)
-      console.log(imageUrls);
+    // Do something with the image URLs (e.g., display them)
+    console.log(imageUrls);
+    const imageUrlsExtracted = JSON.parse(imageUrls);
+    // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
+    const [thumbnailData] = await Promise.all([thumbnailPromise]);
+    imagePreview.src = thumbnailData;
+    // Clear previous results
+    resultsContainer.innerHTML = '';
+    previewimage.style.opacity = 1;
+    labeltiles.style.opacity = 1;
+    labeltilesresult.style.opacity = 1;
+    resultsContainer.style.opacity = 1;
+    // Create image elements and append to results container
+    imageUrlsExtracted.forEach(imageUrl => {
+      // const img = document.createElement('img');
+      // img.src = imageUrl;
+      // resultsContainer.appendChild(img);
+      const col = document.createElement('div');
+      col.classList.add('col-md-4'); // Adjust column size as needed
+      const card = document.createElement('div');
+      card.classList.add('card');
+
+
+      const cardBody = document.createElement('div');
+      cardBody.classList.add('card-body',
+        'shadow', 'p-4');
+
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.classList.add('img-fluid', 'shadow',);
+      cardBody.appendChild(img);
+      card.appendChild(cardBody);
+
+      // card.appendChild(img);
+      col.appendChild(card);
+      resultsContainer.appendChild(col);
+    });
+    stopAnimation();
     // } else {
     //   console.error('Error fetching image URLs:', response.statusText);
     // }
@@ -82,9 +126,9 @@ uploadInput.addEventListener('change', async (event) => {
     // Handle errors (display error message, etc.)
   } finally {
     // Optional: Reset UI elements after processing
-    imagePreview.src = '';
-    imagePreview.style.opacity = 0;
-    previewsection.style.opacity = 0;
+    // imagePreview.src = '';
+    // imagePreview.style.opacity = 0;
+    // previewsection.style.opacity = 0;
   }
 });
 // previewButton.addEventListener('click', () => {
@@ -93,18 +137,19 @@ uploadInput.addEventListener('change', async (event) => {
 
 
 searchButton.addEventListener('click', () => {
-    // Simulate search results (replace with your actual API call)
-    const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
-  
-    // Clear previous results
-    resultsContainer.innerHTML = '';
-    previewimage.style.opacity = 1; 
-    labeltiles.style.opacity =1;
-    labeltilesresult.style.opacity = 1;
-    // Create image elements and append to results container
-    imageUrls.forEach(imageUrl => {
-      const img = document.createElement('img');
-      img.src = imageUrl;
-      resultsContainer.appendChild(img);
-    });
+  // Simulate search results (replace with your actual API call)
+  const imageUrlsExtracted = JSON.parse(imageUrls);
+  // const imageUrls = ['Q4004_4_1.jpg', 'Q4012_4_2 (1).jpg', 'Q4012_4_2.jpg'];
+
+  // Clear previous results
+  resultsContainer.innerHTML = '';
+  previewimage.style.opacity = 1;
+  labeltiles.style.opacity = 1;
+  labeltilesresult.style.opacity = 1;
+  // Create image elements and append to results container
+  imageUrlsExtracted.forEach(imageUrl => {
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    resultsContainer.appendChild(img);
   });
+});
