@@ -64,7 +64,8 @@ uploadInput.addEventListener('change', async (event) => {
 
     // Send the image data to the API (async/await)
     const [base64Data] = await Promise.all([imageDataPromise]);
-    const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+    // const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+    const apiEndpoint = 'https://165cp7er06.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
