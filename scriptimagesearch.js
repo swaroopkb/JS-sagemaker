@@ -65,7 +65,8 @@ uploadInput.addEventListener('change', async (event) => {
     // Send the image data to the API (async/await)
     const [base64Data] = await Promise.all([imageDataPromise]);
     // const apiEndpoint = 'https://mizhtwr2eg.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
-    const apiEndpoint = 'https://165cp7er06.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+    // const apiEndpoint = 'https://165cp7er06.execute-api.ap-south-1.amazonaws.com/dev/sgVisualSearchDemo';
+    const apiEndpoint = 'https://r4y7rqvrl5.execute-api.ap-south-1.amazonaws.com/dev/WA-DEMO';
     const response = await fetch(apiEndpoint, {
       method: 'POST',
       headers: {
@@ -110,8 +111,20 @@ uploadInput.addEventListener('change', async (event) => {
 
       const img = document.createElement('img');
       img.src = imageUrl;
-      img.classList.add('img-fluid', 'shadow',);
+
+      // Split the filename from the URL and remove the extension
+      const filename = imageUrl.split('/').pop().split('.')[0];
+      // console.log("filename", filename)
+      // // Create a tooltip element
+      // Set the tooltip attribute on the image
+      // Create overlay element
+      const overlay = document.createElement('div');
+      overlay.classList.add('overlay');
+      overlay.textContent = filename;
+
+      // Add overlay as a child of cardBody
       cardBody.appendChild(img);
+      cardBody.appendChild(overlay);
       card.appendChild(cardBody);
 
       // card.appendChild(img);
